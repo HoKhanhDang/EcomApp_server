@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 app.use(cors(
     {
-        origin: ["https://ecom-app-admin-dunks-projects.vercel.app","https://ecom-app-client-dunks-projects.vercel.app","https://ecom-app-client-v2-dunks-projects.vercel.app/"],
+        origin: ["https://ecom-app-admin-dunks-projects.vercel.app","https://ecom-app-client-dunks-projects.vercel.app","https://ecom-app-client-v2-dunks-projects.vercel.app"],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true
     }
