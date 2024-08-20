@@ -32,7 +32,7 @@ const headers = {
     apikey: process.env.APIKEY_COMETCHAT,
 };
 
-app.get("/api/create", (req, res) => {
+app.get(`${process.env.URL_SERVER}/api/create`, (req, res) => {
     // data for new user
     const data = {
         // you can use your own logic to generate random UID and name
@@ -68,7 +68,7 @@ app.get("/api/create", (req, res) => {
             }
         });
 });
-app.get("/api/auth", (req, res) => {
+app.get(`${process.env.URL_SERVER}/api/auth`, (req, res) => {
     const uid = req.query.uid;
     // if you have your own login method, call it here.
     // then call CometChat for auth token
@@ -79,7 +79,7 @@ app.get("/api/auth", (req, res) => {
         })
         .catch((error) => console.error("Error:", error));
 });
-app.get("/api/users", (req, res) => {
+app.get(`${process.env.URL_SERVER}/api/users`, (req, res) => {
     axios
         .get(`${process.env.URT_COMETCHAT}/users`, {
             headers,
