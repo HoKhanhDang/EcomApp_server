@@ -10,11 +10,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: [
-            "https://ecom-app-admin-dunks-projects.vercel.app",
-            "https://ecom-app-client-dunks-projects.vercel.app",
-            "https://ecom-app-client-v2-dunks-projects.vercel.app",
-        ],
+        origin: ["http://localhost:3000", "http://localhost:3001"],
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true,
     })
@@ -28,11 +24,11 @@ app.use(express.urlencoded({ extended: true }));
 
 const headers = {
     "Content-Type": "application/json",
-    appid: process.env.APP_ID_COMETCHAT,
-    apikey: process.env.APIKEY_COMETCHAT,
+    appid: process.env.APP_ID_COMETCHAT ,
+    apikey: process.env.APIKEY_COMETCHAT ,
 };
 
-app.get(`${process.env.URL_SERVER}/api/create`, (req, res) => {
+app.get("/api/create", (req, res) => {
     // data for new user
     const data = {
         // you can use your own logic to generate random UID and name
@@ -54,9 +50,7 @@ app.get(`${process.env.URL_SERVER}/api/create`, (req, res) => {
                 })
                 .catch((error) => {
                     console.error("Error fetching auth token:", error);
-                    res.status(500).json({
-                        error: "Error fetching auth token",
-                    });
+                    res.status(500).json({ error: "Error fetching auth token" });
                 });
         })
         .catch((error) => {
@@ -68,7 +62,7 @@ app.get(`${process.env.URL_SERVER}/api/create`, (req, res) => {
             }
         });
 });
-app.get(`${process.env.URL_SERVER}/api/auth`, (req, res) => {
+app.get("/api/auth", (req, res) => {
     const uid = req.query.uid;
     // if you have your own login method, call it here.
     // then call CometChat for auth token
@@ -79,32 +73,28 @@ app.get(`${process.env.URL_SERVER}/api/auth`, (req, res) => {
         })
         .catch((error) => console.error("Error:", error));
 });
-app.get(`${process.env.URL_SERVER}/api/users`, (req, res) => {
-    axios
-        .get(`${process.env.URT_COMETCHAT}/users`, {
-            headers,
-        })
-        .then((response) => {
-            const { data } = response.data;
-            const filterAgentData = data.filter((data) => {
-                // filter agent out from the list of users
-                return data.uid !== process.env.AGENT_ID_COMETCHAT;
-            });
-            res.json(filterAgentData);
-        })
-        .catch((error) => console.error("Error:", error));
+app.get('/api/users', (req, res) => {
+  axios
+    .get(`${process.env.URT_COMETCHAT}/users`, {
+      headers,
+    })
+    .then(response => {
+      const { data } = response.data;
+      const filterAgentData = data.filter(data => {
+      // filter agent out from the list of users
+        return data.uid !== process.env.AGENT_ID_COMETCHAT;
+      });
+      res.json(filterAgentData);
+    })
+    .catch(error => console.error('Error:', error));
 });
 // this function will fetch token
 const requestAuthToken = (uid) => {
     return new Promise((resolve, reject) => {
         axios
-            .post(
-                `${process.env.URT_COMETCHAT}/users/${uid}/auth_tokens`,
-                null,
-                {
-                    headers,
-                }
-            )
+            .post(`${process.env.URT_COMETCHAT}/users/${uid}/auth_tokens`, null, {
+                headers,
+            })
             .then((response) => {
                 console.log("New Auth Token:", response.data);
                 resolve(response.data.data);
